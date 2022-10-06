@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/createPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import Post from './post.entity';
 import { Repository } from 'typeorm';
+import { PostNotFoundException } from './exceptions/postNotFound.exception';
 
 @Injectable()
 export class PostsService {
@@ -22,7 +23,7 @@ export class PostsService {
       return post;
     }
 
-    throw new NotFoundException('Not found');
+    throw new PostNotFoundException(id);
   }
 
   async createPost(data: CreatePostDto): Promise<Post> {
@@ -40,7 +41,7 @@ export class PostsService {
       return updatedPost;
     }
 
-    throw new NotFoundException('Not found');
+    throw new PostNotFoundException(id);
   }
 
   async deletePost(id: number): Promise<string> {
@@ -49,6 +50,6 @@ export class PostsService {
       return `Post with ID: ${id} was removed`;
     }
 
-    throw new NotFoundException('Not found');
+    throw new PostNotFoundException(id);
   }
 }
